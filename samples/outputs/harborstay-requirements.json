@@ -1,0 +1,226 @@
+{
+    "project_name": "HarborStay Motel Platform",
+    "functional_requirements": [
+        {
+            "requirement_id": "FR-001",
+            "title": "Availability search",
+            "description": "Guests shall search room availability by property, arrival date, departure date, room type, occupancy, and accessibility needs.",
+            "actor": "Guest",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-002",
+            "title": "Reservation",
+            "description": "Guests and authorized front-desk staff shall create, view, modify, and cancel reservations according to the active cancellation policy.",
+            "actor": "Guest, Front-desk staff",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-003",
+            "title": "Check-in and check-out",
+            "description": "Front-desk staff shall check guests in and out, record the assigned room, and update the room occupancy state.",
+            "actor": "Guest, Front-desk staff",
+            "security_relevance": false
+        },
+        {
+            "requirement_id": "FR-004",
+            "title": "Room inventory",
+            "description": "The platform shall prevent double booking by maintaining one authoritative inventory record for every room and date range.",
+            "actor": "System",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-005",
+            "title": "Housekeeping",
+            "description": "Housekeeping staff shall update each room as dirty, cleaning, inspected, maintenance blocked, or ready for occupancy.",
+            "actor": "Housekeeping staff",
+            "security_relevance": false
+        },
+        {
+            "requirement_id": "FR-006",
+            "title": "Payments",
+            "description": "The platform shall send payment authorization and refund requests to an approved external payment gateway without storing raw card numbers or card security codes.",
+            "actor": "System",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-007",
+            "title": "Invoices",
+            "description": "The platform shall generate an itemized invoice containing room charges, taxes, discounts, additional services, payments, and refunds.",
+            "actor": "System",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-008",
+            "title": "Rates and policies",
+            "description": "Authorized property managers shall manage room rates, taxes, seasonal restrictions, cancellation rules, and promotional codes.",
+            "actor": "Property manager",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-009",
+            "title": "Notifications",
+            "description": "The platform shall send reservation confirmations, modifications, cancellations, check-in reminders, and payment receipts through approved email or SMS providers.",
+            "actor": "System",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-010",
+            "title": "Guest service",
+            "description": "Guests and staff shall create and track service requests such as extra towels, late check-out, maintenance, and accessibility assistance.",
+            "actor": "Guest, Staff",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-011",
+            "title": "Reports Property managers",
+            "description": "Reports Property managers shall view occupancy, revenue, cancellations, refunds, room status, and service-request reports for properties they are authorized to manage.",
+            "actor": "Property manager",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "FR-012",
+            "title": "Audit review",
+            "description": "Authorized security auditors shall search and export authentication, administrative, reservation, payment, and access-control audit events.",
+            "actor": "Security auditor, Administrator",
+            "security_relevance": true
+        }
+    ],
+    "non_functional_requirements": [
+        {
+            "requirement_id": "NFR-001",
+            "title": "Availability",
+            "description": "The guest reservation service shall provide 99.9 percent monthly availability, excluding approved maintenance windows.",
+            "category": "Availability",
+            "security_relevance": false
+        },
+        {
+            "requirement_id": "NFR-002",
+            "title": "Performance",
+            "description": "The 95th percentile response time for availability searches shall remain below 2 seconds under the agreed normal load.",
+            "category": "Performance",
+            "security_relevance": false
+        },
+        {
+            "requirement_id": "NFR-003",
+            "title": "Concurrency",
+            "description": "The system shall support at least 500 simultaneous guest sessions and 100 simultaneous staff sessions without overselling room inventory.",
+            "category": "Concurrency",
+            "security_relevance": false
+        },
+        {
+            "requirement_id": "NFR-004",
+            "title": "Recovery",
+            "description": "Production data protection shall support a recovery point objective of 15 minutes and a recovery time objective of 60 minutes.",
+            "category": "Recovery",
+            "security_relevance": false
+        },
+        {
+            "requirement_id": "NFR-005",
+            "title": "Observability",
+            "description": "Every production service shall expose health status, structured logs, metrics, correlation identifiers, and alerts for critical failures.",
+            "category": "Observability",
+            "security_relevance": false
+        },
+        {
+            "requirement_id": "NFR-006",
+            "title": "Accessibility",
+            "description": "Guest-facing web pages shall support keyboard navigation, readable focus indicators, and accessible labels for form controls.",
+            "category": "Accessibility",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "NFR-007",
+            "title": "Data residency",
+            "description": "Guest profile, reservation, and invoice data shall remain in the company-approved India hosting region, except data sent to approved third-party processors.",
+            "category": "Data residency",
+            "security_relevance": false
+        }
+    ],
+    "actors": [
+        "Guest",
+        "Front-desk staff",
+        "Housekeeping staff",
+        "Property manager",
+        "Security auditor"
+    ],
+    "security_requirements": [
+        {
+            "requirement_id": "SEC-001",
+            "title": "Transport security",
+            "description": "All internet-facing and service-to-service communications shall use TLS 1.2 or higher with certificate validation.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "SEC-002",
+            "title": "Encryption at rest",
+            "description": "Guest data, reservation data, invoices, backups, audit logs, and application secrets shall be encrypted at rest.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "SEC-003",
+            "title": "Staff authentication",
+            "description": "Front-desk staff, managers, administrators, and security auditors shall use multi-factor authentication.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "SEC-004",
+            "title": "Authorization",
+            "description": "The platform shall enforce role-based access control, property-level authorization, least privilege, and deny-by-default access.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "SEC-005",
+            "title": "Secrets",
+            "description": "API credentials, database passwords, certificates, and encryption keys shall be stored in an approved secrets-management service and shall not be stored in source code.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "SEC-006",
+            "title": "Network boundaries",
+            "description": "Public access, application services, restricted data stores, corporate administration, and third-party services shall be separated by explicit trust boundaries and network controls.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "SEC-007",
+            "title": "Audit protection",
+            "description": "Security-relevant audit events shall be timestamped, linked to an actor or workload identity, protected from unauthorized modification, and retained for at least 365 days.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "SEC-008",
+            "title": "Application protection",
+            "description": "Internet traffic shall pass through rate limiting and web-application attack protection, and critical vulnerabilities shall block production release.",
+            "category": "Security",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "COM-001",
+            "title": "Payment-data boundary",
+            "description": "The company shall use a payment gateway tokenization flow so that raw payment-card data does not enter the motel platform trust boundary.",
+            "category": "Compliance",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "COM-002",
+            "title": "Privacy rights",
+            "description": "The platform shall record privacy consent and support authorized access, correction, export, and deletion requests for guest personal data, subject to legal retention obligations.",
+            "category": "Compliance",
+            "security_relevance": true
+        },
+        {
+            "requirement_id": "COM-003",
+            "title": "Financial retention",
+            "description": "Final invoices, tax records, refunds, and related audit evidence shall be retained for seven years and access shall be limited to authorized roles.",
+            "category": "Compliance",
+            "security_relevance": true
+        }
+    ]
+}

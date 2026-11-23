@@ -1,0 +1,608 @@
+{
+    "schema_version": "1.0",
+    "architecture_name": "HarborStay Motel Platform Architecture",
+    "source_architecture": "outputs/architecture_v1.json",
+    "architecture_status": "DRAFT",
+    "presentation_note": "Groups, lanes, icons and positions are visualization-only metadata. All components and visible flows originate from the validated architecture.",
+    "layout": {
+        "canvas": {
+            "width": 1820,
+            "height": 1120
+        },
+        "direction": "controlled_landscape",
+        "coordinate_units": "points",
+        "region_positions": {
+            "public": {
+                "center_x": 175,
+                "center_y": 650,
+                "columns": 1,
+                "gap_x": 220,
+                "gap_y": 140
+            },
+            "aks_ingress": {
+                "center_x": 490,
+                "center_y": 650,
+                "columns": 1,
+                "gap_x": 220,
+                "gap_y": 130
+            },
+            "aks_backend": {
+                "center_x": 885,
+                "center_y": 690,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 125
+            },
+            "aks_platform": {
+                "center_x": 885,
+                "center_y": 410,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 120
+            },
+            "aks_utility": {
+                "center_x": 885,
+                "center_y": 240,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 115
+            },
+            "other": {
+                "center_x": 1490,
+                "center_y": 960,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 115
+            },
+            "data": {
+                "center_x": 1490,
+                "center_y": 720,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 115
+            },
+            "monitoring": {
+                "center_x": 1490,
+                "center_y": 470,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 115
+            },
+            "utility": {
+                "center_x": 1490,
+                "center_y": 340,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 115
+            },
+            "identity": {
+                "center_x": 1490,
+                "center_y": 200,
+                "columns": 2,
+                "gap_x": 235,
+                "gap_y": 115
+            },
+            "cicd": {
+                "center_x": 760,
+                "center_y": 960,
+                "columns": 3,
+                "gap_x": 235,
+                "gap_y": 110
+            }
+        }
+    },
+    "visual_groups": [
+        {
+            "id": "public_entry",
+            "label": "Public Entry",
+            "parent_id": null,
+            "group_type": "trust_zone",
+            "region": "public",
+            "order": 10,
+            "fill_color": "#F7FBFF",
+            "border_color": "#D13438",
+            "line_style": "dashed"
+        },
+        {
+            "id": "azure_environment",
+            "label": "Private Environment - Internal Trust Zone",
+            "parent_id": null,
+            "group_type": "trust_zone",
+            "region": "internal",
+            "order": 20,
+            "fill_color": "#F8FBFE",
+            "border_color": "#5B9BD5",
+            "line_style": "dashed"
+        },
+        {
+            "id": "aks_platform",
+            "label": "Application Platform",
+            "parent_id": "azure_environment",
+            "group_type": "platform",
+            "region": "aks",
+            "order": 10,
+            "fill_color": "#EDF6FF",
+            "border_color": "#0078D4",
+            "line_style": "solid"
+        },
+        {
+            "id": "frontend_ingress",
+            "label": "Frontend / Ingress",
+            "parent_id": "aks_platform",
+            "group_type": "namespace",
+            "region": "aks_ingress",
+            "order": 10,
+            "fill_color": "#F8FBFF",
+            "border_color": "#8CBFE6",
+            "line_style": "solid"
+        },
+        {
+            "id": "backend_services",
+            "label": "Backend Services",
+            "parent_id": "aks_platform",
+            "group_type": "namespace",
+            "region": "aks_backend",
+            "order": 20,
+            "fill_color": "#F6FBF6",
+            "border_color": "#82C782",
+            "line_style": "solid"
+        },
+        {
+            "id": "kubernetes_platform",
+            "label": "Kubernetes Platform / Features",
+            "parent_id": "aks_platform",
+            "group_type": "platform_features",
+            "region": "aks_platform",
+            "order": 30,
+            "fill_color": "#F5FAFF",
+            "border_color": "#78A9D1",
+            "line_style": "solid"
+        },
+        {
+            "id": "utility_services",
+            "label": "Utility Services",
+            "parent_id": "aks_platform",
+            "group_type": "namespace",
+            "region": "aks_utility",
+            "order": 40,
+            "fill_color": "#FBFBF5",
+            "border_color": "#C8B84A",
+            "line_style": "solid"
+        },
+        {
+            "id": "data_stores",
+            "label": "Data Stores",
+            "parent_id": "azure_environment",
+            "group_type": "service_group",
+            "region": "data",
+            "order": 20,
+            "fill_color": "#FFF9F2",
+            "border_color": "#E59A62",
+            "line_style": "solid"
+        },
+        {
+            "id": "monitoring",
+            "label": "Monitoring & Observability",
+            "parent_id": "azure_environment",
+            "group_type": "service_group",
+            "region": "monitoring",
+            "order": 30,
+            "fill_color": "#F8F5FF",
+            "border_color": "#9B85D1",
+            "line_style": "solid"
+        },
+        {
+            "id": "utility_search",
+            "label": "Utility / Search",
+            "parent_id": "azure_environment",
+            "group_type": "service_group",
+            "region": "utility",
+            "order": 40,
+            "fill_color": "#FFFDF2",
+            "border_color": "#C9A227",
+            "line_style": "solid"
+        },
+        {
+            "id": "identity_security",
+            "label": "Identity & Security",
+            "parent_id": "azure_environment",
+            "group_type": "service_group",
+            "region": "identity",
+            "order": 50,
+            "fill_color": "#FFF7FA",
+            "border_color": "#CE79B3",
+            "line_style": "solid"
+        },
+        {
+            "id": "cicd",
+            "label": "CI/CD & Deployment",
+            "parent_id": "azure_environment",
+            "group_type": "delivery_lane",
+            "region": "cicd",
+            "order": 60,
+            "fill_color": "#F5F8FC",
+            "border_color": "#6B8EAD",
+            "line_style": "solid"
+        },
+        {
+            "id": "other_services",
+            "label": "Approved External / Third-Party Services",
+            "parent_id": "azure_environment",
+            "group_type": "service_group",
+            "region": "other",
+            "order": 70,
+            "fill_color": "#F7F7F7",
+            "border_color": "#A0A0A0",
+            "line_style": "solid"
+        }
+    ],
+    "node_presentations": [
+        {
+            "node_id": "BillingRatesService",
+            "label": "Billing, Invoicing & Rates Service",
+            "category": "compute",
+            "group_id": "backend_services",
+            "layout_order": 20,
+            "icon_key": "compute",
+            "subtitle": "SERVICE"
+        },
+        {
+            "node_id": "GuestServiceReportingService",
+            "label": "Guest Service & Reporting Service",
+            "category": "compute",
+            "group_id": "backend_services",
+            "layout_order": 20,
+            "icon_key": "compute",
+            "subtitle": "SERVICE"
+        },
+        {
+            "node_id": "NotificationService",
+            "label": "Notification Dispatch Service",
+            "category": "compute",
+            "group_id": "backend_services",
+            "layout_order": 20,
+            "icon_key": "compute",
+            "subtitle": "SERVICE"
+        },
+        {
+            "node_id": "PaymentService",
+            "label": "Payment Orchestration Service",
+            "category": "compute",
+            "group_id": "backend_services",
+            "layout_order": 20,
+            "icon_key": "compute",
+            "subtitle": "SERVICE"
+        },
+        {
+            "node_id": "ReservationService",
+            "label": "Reservation & Front-Desk Service",
+            "category": "compute",
+            "group_id": "backend_services",
+            "layout_order": 20,
+            "icon_key": "compute",
+            "subtitle": "SERVICE"
+        },
+        {
+            "node_id": "InventoryService",
+            "label": "Room Inventory & Housekeeping Service",
+            "category": "compute",
+            "group_id": "backend_services",
+            "layout_order": 20,
+            "icon_key": "compute",
+            "subtitle": "SERVICE"
+        },
+        {
+            "node_id": "PrimaryDatabase",
+            "label": "Regional Transactional Database & Backup Store",
+            "category": "database",
+            "group_id": "data_stores",
+            "layout_order": 10,
+            "icon_key": "database",
+            "subtitle": "DATABASE"
+        },
+        {
+            "node_id": "EdgeGateway",
+            "label": "Edge WAF & API Gateway",
+            "category": "ingress",
+            "group_id": "frontend_ingress",
+            "layout_order": 10,
+            "icon_key": "ingress",
+            "subtitle": "INGRESS / GATEWAY"
+        },
+        {
+            "node_id": "IdentityProvider",
+            "label": "Federated Identity Provider",
+            "category": "identity",
+            "group_id": "identity_security",
+            "layout_order": 10,
+            "icon_key": "identity",
+            "subtitle": "IDENTITY"
+        },
+        {
+            "node_id": "SecretsVault",
+            "label": "Key & Secrets Management Vault",
+            "category": "security",
+            "group_id": "identity_security",
+            "layout_order": 20,
+            "icon_key": "security",
+            "subtitle": "SECURITY / VAULT"
+        },
+        {
+            "node_id": "AuditAndMonitoring",
+            "label": "Immutable Audit Store & Observability Service",
+            "category": "monitoring",
+            "group_id": "monitoring",
+            "layout_order": 10,
+            "icon_key": "monitoring",
+            "subtitle": "MONITORING"
+        },
+        {
+            "node_id": "StaffPortal",
+            "label": "Staff & Auditor Operations Portal",
+            "category": "monitoring",
+            "group_id": "monitoring",
+            "layout_order": 10,
+            "icon_key": "monitoring",
+            "subtitle": "CLIENT"
+        },
+        {
+            "node_id": "EmailSmsProvider",
+            "label": "External Email & SMS Provider",
+            "category": "other",
+            "group_id": "other_services",
+            "layout_order": 90,
+            "icon_key": "other",
+            "subtitle": "EXTERNAL SERVICE"
+        },
+        {
+            "node_id": "PaymentGateway",
+            "label": "External Payment Gateway",
+            "category": "other",
+            "group_id": "other_services",
+            "layout_order": 90,
+            "icon_key": "other",
+            "subtitle": "EXTERNAL SERVICE"
+        },
+        {
+            "node_id": "GuestClient",
+            "label": "Guest Web & Mobile Interface",
+            "category": "client",
+            "group_id": "public_entry",
+            "layout_order": 10,
+            "icon_key": "client",
+            "subtitle": "CLIENT"
+        }
+    ],
+    "edge_presentations": [
+        {
+            "edge_id": "GuestClient->EdgeGateway",
+            "flow_type": "data_request",
+            "visible_label": "HTTPS",
+            "show_label": true
+        },
+        {
+            "edge_id": "StaffPortal->EdgeGateway",
+            "flow_type": "management",
+            "visible_label": "HTTPS",
+            "show_label": true
+        },
+        {
+            "edge_id": "EdgeGateway->IdentityProvider",
+            "flow_type": "management",
+            "visible_label": "HTTPS / OIDC",
+            "show_label": true
+        },
+        {
+            "edge_id": "EdgeGateway->ReservationService",
+            "flow_type": "data_request",
+            "visible_label": "HTTPS / API requests",
+            "show_label": true
+        },
+        {
+            "edge_id": "ReservationService->InventoryService",
+            "flow_type": "data_request",
+            "visible_label": "Service API (HTTPS)",
+            "show_label": true
+        },
+        {
+            "edge_id": "ReservationService->PaymentService",
+            "flow_type": "data_request",
+            "visible_label": "Service API (HTTPS)",
+            "show_label": true
+        },
+        {
+            "edge_id": "ReservationService->NotificationService",
+            "flow_type": "data_request",
+            "visible_label": "Service API (HTTPS)",
+            "show_label": true
+        },
+        {
+            "edge_id": "ReservationService->PrimaryDatabase",
+            "flow_type": "data_request",
+            "visible_label": "Encrypted DB connection",
+            "show_label": true
+        },
+        {
+            "edge_id": "InventoryService->PrimaryDatabase",
+            "flow_type": "data_request",
+            "visible_label": "Encrypted DB connection",
+            "show_label": true
+        },
+        {
+            "edge_id": "PaymentService->SecretsVault",
+            "flow_type": "management",
+            "visible_label": "HTTPS",
+            "show_label": true
+        },
+        {
+            "edge_id": "PaymentService->PaymentGateway",
+            "flow_type": "management",
+            "visible_label": "HTTPS",
+            "show_label": true
+        },
+        {
+            "edge_id": "NotificationService->EmailSmsProvider",
+            "flow_type": "data_request",
+            "visible_label": "HTTPS",
+            "show_label": true
+        },
+        {
+            "edge_id": "ReservationService->AuditAndMonitoring",
+            "flow_type": "management",
+            "visible_label": "HTTPS / Syslog",
+            "show_label": true
+        },
+        {
+            "edge_id": "BillingRatesService->EdgeGateway",
+            "flow_type": "data_request",
+            "visible_label": "HTTPS",
+            "show_label": true
+        },
+        {
+            "edge_id": "BillingRatesService->ReservationService",
+            "flow_type": "data_request",
+            "visible_label": "Service API (HTTPS)",
+            "show_label": true
+        },
+        {
+            "edge_id": "BillingRatesService->PrimaryDatabase",
+            "flow_type": "data_request",
+            "visible_label": "Encrypted DB connection",
+            "show_label": true
+        },
+        {
+            "edge_id": "BillingRatesService->AuditAndMonitoring",
+            "flow_type": "management",
+            "visible_label": "HTTPS / Syslog",
+            "show_label": true
+        },
+        {
+            "edge_id": "GuestServiceReportingService->EdgeGateway",
+            "flow_type": "data_request",
+            "visible_label": "HTTPS",
+            "show_label": true
+        },
+        {
+            "edge_id": "GuestServiceReportingService->ReservationService",
+            "flow_type": "data_request",
+            "visible_label": "Service API (HTTPS)",
+            "show_label": true
+        },
+        {
+            "edge_id": "GuestServiceReportingService->PrimaryDatabase",
+            "flow_type": "data_request",
+            "visible_label": "Encrypted DB connection",
+            "show_label": true
+        },
+        {
+            "edge_id": "GuestServiceReportingService->AuditAndMonitoring",
+            "flow_type": "management",
+            "visible_label": "HTTPS / Syslog",
+            "show_label": true
+        },
+        {
+            "edge_id": "StaffPortal->EdgeGateway-MFA",
+            "flow_type": "management",
+            "visible_label": "HTTPS / MFA",
+            "show_label": true
+        }
+    ],
+    "theme": {
+        "font_family": "Arial",
+        "background": "#F5F8FC",
+        "text": "#243447",
+        "muted_text": "#5B6673",
+        "category_styles": {
+            "client": {
+                "fill": "#E8F3FF",
+                "border": "#0078D4",
+                "accent": "#0078D4"
+            },
+            "network": {
+                "fill": "#EAF7FF",
+                "border": "#0099BC",
+                "accent": "#0099BC"
+            },
+            "ingress": {
+                "fill": "#F0F5FF",
+                "border": "#4F6BED",
+                "accent": "#4F6BED"
+            },
+            "compute": {
+                "fill": "#EEF7EE",
+                "border": "#107C10",
+                "accent": "#107C10"
+            },
+            "database": {
+                "fill": "#FFF4E5",
+                "border": "#D83B01",
+                "accent": "#D83B01"
+            },
+            "monitoring": {
+                "fill": "#F3EEFF",
+                "border": "#735BC1",
+                "accent": "#735BC1"
+            },
+            "search": {
+                "fill": "#FFF8D9",
+                "border": "#B8860B",
+                "accent": "#B8860B"
+            },
+            "identity": {
+                "fill": "#FCEEF4",
+                "border": "#C239B3",
+                "accent": "#C239B3"
+            },
+            "security": {
+                "fill": "#FFF0F0",
+                "border": "#D13438",
+                "accent": "#D13438"
+            },
+            "registry": {
+                "fill": "#EAF4FF",
+                "border": "#0063B1",
+                "accent": "#0063B1"
+            },
+            "cicd": {
+                "fill": "#F0F6FF",
+                "border": "#005A9E",
+                "accent": "#005A9E"
+            },
+            "deployment": {
+                "fill": "#F5F0FF",
+                "border": "#8764B8",
+                "accent": "#8764B8"
+            },
+            "orchestration": {
+                "fill": "#E8F5FF",
+                "border": "#0078D4",
+                "accent": "#0078D4"
+            },
+            "other": {
+                "fill": "#F3F4F6",
+                "border": "#687078",
+                "accent": "#687078"
+            }
+        },
+        "flow_styles": {
+            "data_request": {
+                "label": "Data / request flow",
+                "color": "#0078D4",
+                "line_style": "solid",
+                "pen_width": 2.0
+            },
+            "management": {
+                "label": "Management / control flow",
+                "color": "#7A6F9B",
+                "line_style": "dashed",
+                "pen_width": 1.8
+            },
+            "deployment": {
+                "label": "Deployment flow",
+                "color": "#C55A11",
+                "line_style": "dashed",
+                "pen_width": 2.2
+            }
+        }
+    }
+}

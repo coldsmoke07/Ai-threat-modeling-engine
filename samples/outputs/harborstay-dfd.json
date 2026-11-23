@@ -1,0 +1,943 @@
+{
+    "dfd_schema": "1.0",
+    "generated_at": "2026-11-23T09:27:25.442543+00:00",
+    "source_approval": {
+        "status": "CANDIDATE_ACTIVE",
+        "approved": false,
+        "approved_version": 1,
+        "approved_hash": "46ecaace295d4f80b67cf94a176f32cff05f466901741b0d11190131e7cba570",
+        "approved_by": "Pending Human Sign-Off",
+        "approved_at": "2026-11-23T09:27:25.442394+00:00"
+    },
+    "architecture_name": "HarborStay Motel Platform Architecture",
+    "summary": {
+        "total_processes": 7,
+        "total_data_stores": 3,
+        "total_external_entities": 5,
+        "total_data_flows": 22,
+        "total_trust_boundaries": 6,
+        "total_elements": 37
+    },
+    "processes": [
+        {
+            "id": "EdgeGateway",
+            "name": "Edge WAF & API Gateway",
+            "node_type": "Ingress / Gateway",
+            "dfd_kind": "process",
+            "dfd_label": "Process",
+            "trust_zone": "Edge",
+            "requirement_ids": [
+                "NFR-001",
+                "NFR-002",
+                "NFR-003",
+                "SEC-001",
+                "SEC-006",
+                "SEC-008"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "E",
+                "D"
+            ]
+        },
+        {
+            "id": "ReservationService",
+            "name": "Reservation & Front-Desk Service",
+            "node_type": "Service",
+            "dfd_kind": "process",
+            "dfd_label": "Process",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-003",
+                "FR-007",
+                "NFR-001",
+                "NFR-002",
+                "NFR-003",
+                "SEC-004",
+                "COM-002"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "E",
+                "D"
+            ]
+        },
+        {
+            "id": "InventoryService",
+            "name": "Room Inventory & Housekeeping Service",
+            "node_type": "Service",
+            "dfd_kind": "process",
+            "dfd_label": "Process",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-004",
+                "FR-005",
+                "FR-008",
+                "FR-010",
+                "FR-011",
+                "NFR-003"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "E",
+                "D"
+            ]
+        },
+        {
+            "id": "PaymentService",
+            "name": "Payment Orchestration Service",
+            "node_type": "Service",
+            "dfd_kind": "process",
+            "dfd_label": "Process",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-006",
+                "FR-007",
+                "COM-001"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "E",
+                "D"
+            ]
+        },
+        {
+            "id": "NotificationService",
+            "name": "Notification Dispatch Service",
+            "node_type": "Service",
+            "dfd_kind": "process",
+            "dfd_label": "Process",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-009",
+                "NFR-007"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "E",
+                "D"
+            ]
+        },
+        {
+            "id": "BillingRatesService",
+            "name": "Billing, Invoicing & Rates Service",
+            "node_type": "Service",
+            "dfd_kind": "process",
+            "dfd_label": "Process",
+            "trust_zone": "Application",
+            "requirement_ids": [],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "E",
+                "D"
+            ]
+        },
+        {
+            "id": "GuestServiceReportingService",
+            "name": "Guest Service & Reporting Service",
+            "node_type": "Service",
+            "dfd_kind": "process",
+            "dfd_label": "Process",
+            "trust_zone": "Application",
+            "requirement_ids": [],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "E",
+                "D"
+            ]
+        }
+    ],
+    "data_stores": [
+        {
+            "id": "PrimaryDatabase",
+            "name": "Regional Transactional Database & Backup Store",
+            "node_type": "Database",
+            "dfd_kind": "data_store",
+            "dfd_label": "Data Store",
+            "trust_zone": "Restricted Data",
+            "requirement_ids": [
+                "FR-004",
+                "FR-007",
+                "NFR-004",
+                "NFR-007",
+                "SEC-002",
+                "COM-002",
+                "COM-003"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "T",
+                "I"
+            ]
+        },
+        {
+            "id": "SecretsVault",
+            "name": "Key & Secrets Management Vault",
+            "node_type": "Security / Vault",
+            "dfd_kind": "data_store",
+            "dfd_label": "Data Store",
+            "trust_zone": "Restricted Data",
+            "requirement_ids": [
+                "SEC-002",
+                "SEC-005"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "T",
+                "I"
+            ]
+        },
+        {
+            "id": "AuditAndMonitoring",
+            "name": "Immutable Audit Store & Observability Service",
+            "node_type": "Monitoring",
+            "dfd_kind": "data_store",
+            "dfd_label": "Data Store",
+            "trust_zone": "Corporate Management",
+            "requirement_ids": [
+                "FR-012",
+                "NFR-005",
+                "SEC-002",
+                "SEC-007",
+                "COM-003"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "T",
+                "I"
+            ]
+        }
+    ],
+    "external_entities": [
+        {
+            "id": "GuestClient",
+            "name": "Guest Web & Mobile Interface",
+            "node_type": "Client",
+            "dfd_kind": "external_entity",
+            "dfd_label": "External Entity",
+            "trust_zone": "Public Internet",
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-007",
+                "FR-010",
+                "NFR-006",
+                "COM-002"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "S",
+                "R"
+            ]
+        },
+        {
+            "id": "StaffPortal",
+            "name": "Staff & Auditor Operations Portal",
+            "node_type": "Client",
+            "dfd_kind": "external_entity",
+            "dfd_label": "External Entity",
+            "trust_zone": "Corporate Management",
+            "requirement_ids": [
+                "FR-003",
+                "FR-005",
+                "FR-008",
+                "FR-011",
+                "FR-012",
+                "SEC-003",
+                "SEC-004"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "S",
+                "R"
+            ]
+        },
+        {
+            "id": "PaymentGateway",
+            "name": "External Payment Gateway",
+            "node_type": "External Service",
+            "dfd_kind": "external_entity",
+            "dfd_label": "External Entity",
+            "trust_zone": "Approved Third Parties",
+            "requirement_ids": [
+                "FR-006",
+                "COM-001",
+                "NFR-007"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "S",
+                "R"
+            ]
+        },
+        {
+            "id": "EmailSmsProvider",
+            "name": "External Email & SMS Provider",
+            "node_type": "External Service",
+            "dfd_kind": "external_entity",
+            "dfd_label": "External Entity",
+            "trust_zone": "Approved Third Parties",
+            "requirement_ids": [
+                "FR-009",
+                "NFR-007"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "S",
+                "R"
+            ]
+        },
+        {
+            "id": "IdentityProvider",
+            "name": "Federated Identity Provider",
+            "node_type": "Identity",
+            "dfd_kind": "external_entity",
+            "dfd_label": "External Entity",
+            "trust_zone": "Approved Third Parties",
+            "requirement_ids": [
+                "SEC-003",
+                "SEC-004"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "S",
+                "R"
+            ]
+        }
+    ],
+    "data_flows": [
+        {
+            "id": "GuestClient->EdgeGateway",
+            "source": "GuestClient",
+            "source_name": "Guest Web & Mobile Interface",
+            "source_dfd_type": "External Entity",
+            "target": "EdgeGateway",
+            "target_name": "Edge WAF & API Gateway",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Search, reservation, profile, and service-request data",
+            "authentication": "OIDC session or guest session",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-010",
+                "SEC-001",
+                "SEC-006",
+                "SEC-008"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "StaffPortal->EdgeGateway",
+            "source": "StaffPortal",
+            "source_name": "Staff & Auditor Operations Portal",
+            "source_dfd_type": "External Entity",
+            "target": "EdgeGateway",
+            "target_name": "Edge WAF & API Gateway",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Check-in, room status, rates, reports, and audit queries",
+            "authentication": "MFA and role token",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-003",
+                "FR-005",
+                "FR-008",
+                "FR-011",
+                "FR-012",
+                "SEC-001",
+                "SEC-003",
+                "SEC-004"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "EdgeGateway->IdentityProvider",
+            "source": "EdgeGateway",
+            "source_name": "Edge WAF & API Gateway",
+            "source_dfd_type": "Process",
+            "target": "IdentityProvider",
+            "target_name": "Federated Identity Provider",
+            "target_dfd_type": "External Entity",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS / OIDC",
+            "data": "Authentication response, MFA verification, and role claims",
+            "authentication": "OIDC Client Credentials",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "SEC-001",
+                "SEC-003",
+                "SEC-004",
+                "SEC-006"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "EdgeGateway->ReservationService",
+            "source": "EdgeGateway",
+            "source_name": "Edge WAF & API Gateway",
+            "source_dfd_type": "Process",
+            "target": "ReservationService",
+            "target_name": "Reservation & Front-Desk Service",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Validated API request and identity claims",
+            "authentication": "Workload identity",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-003",
+                "NFR-001",
+                "NFR-002",
+                "SEC-001",
+                "SEC-004",
+                "SEC-006"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "ReservationService->InventoryService",
+            "source": "ReservationService",
+            "source_name": "Reservation & Front-Desk Service",
+            "source_dfd_type": "Process",
+            "target": "InventoryService",
+            "target_name": "Room Inventory & Housekeeping Service",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Service API (HTTPS)",
+            "data": "Availability hold, confirmation, modification, cancellation",
+            "authentication": "Mutual service identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-004",
+                "FR-005",
+                "FR-008",
+                "FR-010",
+                "FR-011",
+                "NFR-003",
+                "SEC-001"
+            ],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "ReservationService->PaymentService",
+            "source": "ReservationService",
+            "source_name": "Reservation & Front-Desk Service",
+            "source_dfd_type": "Process",
+            "target": "PaymentService",
+            "target_name": "Payment Orchestration Service",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Service API (HTTPS)",
+            "data": "Invoice payment and refund orchestration requests",
+            "authentication": "Mutual service identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [
+                "FR-006",
+                "FR-007",
+                "SEC-001",
+                "COM-001"
+            ],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "ReservationService->NotificationService",
+            "source": "ReservationService",
+            "source_name": "Reservation & Front-Desk Service",
+            "source_dfd_type": "Process",
+            "target": "NotificationService",
+            "target_name": "Notification Dispatch Service",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Service API (HTTPS)",
+            "data": "Booking confirmation, reminder, and receipt trigger events",
+            "authentication": "Mutual service identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [
+                "FR-009",
+                "SEC-001"
+            ],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "ReservationService->PrimaryDatabase",
+            "source": "ReservationService",
+            "source_name": "Reservation & Front-Desk Service",
+            "source_dfd_type": "Process",
+            "target": "PrimaryDatabase",
+            "target_name": "Regional Transactional Database & Backup Store",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Encrypted DB connection",
+            "data": "Guest, reservation, invoice, and privacy consent records",
+            "authentication": "Least-privilege workload identity",
+            "encryption": "TLS 1.3 / TDE",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-002",
+                "FR-007",
+                "NFR-004",
+                "NFR-007",
+                "SEC-002",
+                "SEC-004",
+                "SEC-006",
+                "COM-002",
+                "COM-003"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "InventoryService->PrimaryDatabase",
+            "source": "InventoryService",
+            "source_name": "Room Inventory & Housekeeping Service",
+            "source_dfd_type": "Process",
+            "target": "PrimaryDatabase",
+            "target_name": "Regional Transactional Database & Backup Store",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Encrypted DB connection",
+            "data": "Authoritative room inventory locks, housekeeping states, rates, and reports",
+            "authentication": "Least-privilege workload identity",
+            "encryption": "TLS 1.3 / TDE",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-004",
+                "FR-005",
+                "FR-008",
+                "FR-010",
+                "FR-011",
+                "NFR-003",
+                "SEC-002",
+                "SEC-006"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "PaymentService->SecretsVault",
+            "source": "PaymentService",
+            "source_name": "Payment Orchestration Service",
+            "source_dfd_type": "Process",
+            "target": "SecretsVault",
+            "target_name": "Key & Secrets Management Vault",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Gateway API credentials, certificates, and encryption keys",
+            "authentication": "Least-privilege workload identity",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "SEC-001",
+                "SEC-004",
+                "SEC-005"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "PaymentService->PaymentGateway",
+            "source": "PaymentService",
+            "source_name": "Payment Orchestration Service",
+            "source_dfd_type": "Process",
+            "target": "PaymentGateway",
+            "target_name": "External Payment Gateway",
+            "target_dfd_type": "External Entity",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Tokenized authorization, capture, and refund request",
+            "authentication": "Gateway API credential",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-006",
+                "NFR-007",
+                "SEC-001",
+                "SEC-005",
+                "SEC-006",
+                "COM-001"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "NotificationService->EmailSmsProvider",
+            "source": "NotificationService",
+            "source_name": "Notification Dispatch Service",
+            "source_dfd_type": "Process",
+            "target": "EmailSmsProvider",
+            "target_name": "External Email & SMS Provider",
+            "target_dfd_type": "External Entity",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Approved email or SMS message",
+            "authentication": "Provider API credential",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-009",
+                "NFR-007",
+                "SEC-001",
+                "SEC-005",
+                "SEC-006"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "ReservationService->AuditAndMonitoring",
+            "source": "ReservationService",
+            "source_name": "Reservation & Front-Desk Service",
+            "source_dfd_type": "Process",
+            "target": "AuditAndMonitoring",
+            "target_name": "Immutable Audit Store & Observability Service",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS / Syslog",
+            "data": "Structured health metrics, correlation IDs, and immutable security audit events",
+            "authentication": "Workload identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "crosses_trust_boundary": true,
+            "requirement_ids": [
+                "FR-012",
+                "NFR-005",
+                "SEC-001",
+                "SEC-007",
+                "COM-003"
+            ],
+            "threat_count": 2,
+            "max_severity": "HIGH",
+            "stride_codes": [
+                "I",
+                "T"
+            ]
+        },
+        {
+            "id": "BillingRatesService->EdgeGateway",
+            "source": "BillingRatesService",
+            "source_name": "Billing, Invoicing & Rates Service",
+            "source_dfd_type": "Process",
+            "target": "EdgeGateway",
+            "target_name": "Edge WAF & API Gateway",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "BillingRatesService->ReservationService",
+            "source": "BillingRatesService",
+            "source_name": "Billing, Invoicing & Rates Service",
+            "source_dfd_type": "Process",
+            "target": "ReservationService",
+            "target_name": "Reservation & Front-Desk Service",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Service API (HTTPS)",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "BillingRatesService->PrimaryDatabase",
+            "source": "BillingRatesService",
+            "source_name": "Billing, Invoicing & Rates Service",
+            "source_dfd_type": "Process",
+            "target": "PrimaryDatabase",
+            "target_name": "Regional Transactional Database & Backup Store",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Encrypted DB connection",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "BillingRatesService->AuditAndMonitoring",
+            "source": "BillingRatesService",
+            "source_name": "Billing, Invoicing & Rates Service",
+            "source_dfd_type": "Process",
+            "target": "AuditAndMonitoring",
+            "target_name": "Immutable Audit Store & Observability Service",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS / Syslog",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "GuestServiceReportingService->EdgeGateway",
+            "source": "GuestServiceReportingService",
+            "source_name": "Guest Service & Reporting Service",
+            "source_dfd_type": "Process",
+            "target": "EdgeGateway",
+            "target_name": "Edge WAF & API Gateway",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "GuestServiceReportingService->ReservationService",
+            "source": "GuestServiceReportingService",
+            "source_name": "Guest Service & Reporting Service",
+            "source_dfd_type": "Process",
+            "target": "ReservationService",
+            "target_name": "Reservation & Front-Desk Service",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Service API (HTTPS)",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "GuestServiceReportingService->PrimaryDatabase",
+            "source": "GuestServiceReportingService",
+            "source_name": "Guest Service & Reporting Service",
+            "source_dfd_type": "Process",
+            "target": "PrimaryDatabase",
+            "target_name": "Regional Transactional Database & Backup Store",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "Encrypted DB connection",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "GuestServiceReportingService->AuditAndMonitoring",
+            "source": "GuestServiceReportingService",
+            "source_name": "Guest Service & Reporting Service",
+            "source_dfd_type": "Process",
+            "target": "AuditAndMonitoring",
+            "target_name": "Immutable Audit Store & Observability Service",
+            "target_dfd_type": "Data Store",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS / Syslog",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        },
+        {
+            "id": "StaffPortal->EdgeGateway-MFA",
+            "source": "StaffPortal",
+            "source_name": "Staff & Auditor Operations Portal",
+            "source_dfd_type": "External Entity",
+            "target": "EdgeGateway",
+            "target_name": "Edge WAF & API Gateway",
+            "target_dfd_type": "Process",
+            "dfd_kind": "data_flow",
+            "dfd_label": "Data Flow",
+            "protocol": "HTTPS / MFA",
+            "data": "Data",
+            "authentication": "None",
+            "encryption": "TLS",
+            "crosses_trust_boundary": false,
+            "requirement_ids": [],
+            "threat_count": 1,
+            "max_severity": "LOW",
+            "stride_codes": [
+                "I"
+            ]
+        }
+    ],
+    "trust_boundaries": [
+        {
+            "id": "TZ-1",
+            "name": "Public Internet",
+            "description": "Untrusted guest browsers and mobile client devices."
+        },
+        {
+            "id": "TZ-2",
+            "name": "Edge",
+            "description": "DNS, Web Application Firewall (WAF), rate limiting, and API entry point."
+        },
+        {
+            "id": "TZ-3",
+            "name": "Application",
+            "description": "Reservation, inventory, housekeeping, reporting, notification, and payment-orchestration services."
+        },
+        {
+            "id": "TZ-4",
+            "name": "Restricted Data",
+            "description": "Encrypted guest, reservation, room, invoice, secret, and audit data stores in India region."
+        },
+        {
+            "id": "TZ-5",
+            "name": "Corporate Management",
+            "description": "Staff workstation access, administration, monitoring, and security audit operations."
+        },
+        {
+            "id": "TZ-6",
+            "name": "Approved Third Parties",
+            "description": "External payment gateway, email/SMS provider, and federated identity provider."
+        }
+    ]
+}

@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/coldsmoke07/Ai-threat-modeling-engine/blob/main/schemas/architecture.schema.json",
+  "title": "AI Threat Modeling Engine Architecture Graph",
+  "description": "Structural contract for architecture graphs consumed by the backend validators and review workflow.",
+  "type": "object",
+  "required": [
+    "architecture_name",
+    "architecture_style",
+    "status",
+    "trust_zones",
+    "nodes",
+    "edges"
+  ],
+  "properties": {
+    "architecture_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "architecture_style": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "APPROVED"
+      ]
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "trust_zones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/trustZone"
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    }
+  },
+  "$defs": {
+    "requirementIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "trustZone": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "trust_zone": {
+          "type": "string"
+        },
+        "requirement_ids": {
+          "$ref": "#/$defs/requirementIds"
+        },
+        "satisfies_requirements": {
+          "$ref": "#/$defs/requirementIds"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "required": [
+        "id",
+        "source",
+        "target",
+        "protocol"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "protocol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "data": {
+          "type": "string"
+        },
+        "authentication": {
+          "type": "string"
+        },
+        "encryption": {
+          "type": "string"
+        },
+        "trust_boundary_crossing": {
+          "type": "boolean"
+        },
+        "requirement_ids": {
+          "$ref": "#/$defs/requirementIds"
+        },
+        "satisfies_requirements": {
+          "$ref": "#/$defs/requirementIds"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,598 @@
+{
+    "architecture_name": "HarborStay Motel Platform Architecture",
+    "architecture_style": "Layered Microservices with Explicit Trust Boundaries",
+    "description": "Candidate architecture for HarborStay Motel Platform separating Public Internet, Edge WAF/API Gateway, Application microservices, Restricted Data stores, Corporate Management, and Approved Third Parties.",
+    "status": "DRAFT",
+    "assumptions": [
+        "All internet-facing and inter-service communications use TLS 1.2+ with certificate validation.",
+        "Raw payment card numbers and CVV codes never enter the HarborStay trust boundary (tokenized via gateway).",
+        "Guest profile, reservation, and invoice data reside in the approved India hosting region.",
+        "Staff and auditor access requires multi-factor authentication (MFA) and RBAC least privilege."
+    ],
+    "trust_zones": [
+        {
+            "id": "TZ-1",
+            "name": "Public Internet",
+            "description": "Untrusted guest browsers and mobile client devices."
+        },
+        {
+            "id": "TZ-2",
+            "name": "Edge",
+            "description": "DNS, Web Application Firewall (WAF), rate limiting, and API entry point."
+        },
+        {
+            "id": "TZ-3",
+            "name": "Application",
+            "description": "Reservation, inventory, housekeeping, reporting, notification, and payment-orchestration services."
+        },
+        {
+            "id": "TZ-4",
+            "name": "Restricted Data",
+            "description": "Encrypted guest, reservation, room, invoice, secret, and audit data stores in India region."
+        },
+        {
+            "id": "TZ-5",
+            "name": "Corporate Management",
+            "description": "Staff workstation access, administration, monitoring, and security audit operations."
+        },
+        {
+            "id": "TZ-6",
+            "name": "Approved Third Parties",
+            "description": "External payment gateway, email/SMS provider, and federated identity provider."
+        }
+    ],
+    "nodes": [
+        {
+            "id": "GuestClient",
+            "name": "Guest Web & Mobile Interface",
+            "type": "Client",
+            "description": "Accessible guest-facing web and mobile portal for room search, reservations, invoices, and service requests.",
+            "trust_zone": "Public Internet",
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-007",
+                "FR-010",
+                "NFR-006",
+                "COM-002"
+            ],
+            "roles": [
+                "Guest"
+            ],
+            "satisfies_requirements": [
+                "FR-001",
+                "FR-002",
+                "FR-009",
+                "FR-010",
+                "NFR-006",
+                "COM-002"
+            ]
+        },
+        {
+            "id": "StaffPortal",
+            "name": "Staff & Auditor Operations Portal",
+            "type": "Client",
+            "description": "Restricted corporate workstation interface for front-desk, housekeeping, property managers, and security auditors.",
+            "trust_zone": "Corporate Management",
+            "requirement_ids": [
+                "FR-003",
+                "FR-005",
+                "FR-008",
+                "FR-011",
+                "FR-012",
+                "SEC-003",
+                "SEC-004"
+            ],
+            "roles": [
+                "Front-desk staff",
+                "Housekeeping staff",
+                "Property manager",
+                "Security auditor"
+            ]
+        },
+        {
+            "id": "EdgeGateway",
+            "name": "Edge WAF & API Gateway",
+            "type": "Ingress / Gateway",
+            "description": "Internet edge enforcing TLS 1.2+, WAF attack protection, rate limiting, and token validation.",
+            "trust_zone": "Edge",
+            "requirement_ids": [
+                "NFR-001",
+                "NFR-002",
+                "NFR-003",
+                "SEC-001",
+                "SEC-006",
+                "SEC-008"
+            ],
+            "satisfies_requirements": [
+                "NFR-001",
+                "NFR-002",
+                "SEC-001",
+                "SEC-006",
+                "SEC-008"
+            ]
+        },
+        {
+            "id": "ReservationService",
+            "name": "Reservation & Front-Desk Service",
+            "type": "Service",
+            "description": "Stateless application service managing availability search, booking lifecycle, check-in/out, invoices, and privacy requests.",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-003",
+                "FR-007",
+                "NFR-001",
+                "NFR-002",
+                "NFR-003",
+                "SEC-004",
+                "COM-002"
+            ],
+            "satisfies_requirements": [
+                "FR-001",
+                "FR-002",
+                "FR-003",
+                "NFR-001",
+                "NFR-002"
+            ]
+        },
+        {
+            "id": "InventoryService",
+            "name": "Room Inventory & Housekeeping Service",
+            "type": "Service",
+            "description": "Authoritative room inventory locking service preventing concurrent double-booking, plus housekeeping, rates, guest requests, and reports.",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-004",
+                "FR-005",
+                "FR-008",
+                "FR-010",
+                "FR-011",
+                "NFR-003"
+            ],
+            "satisfies_requirements": [
+                "FR-004",
+                "FR-005",
+                "NFR-003"
+            ]
+        },
+        {
+            "id": "PaymentService",
+            "name": "Payment Orchestration Service",
+            "type": "Service",
+            "description": "Orchestrates tokenized payment authorizations, captures, and refunds without storing raw card numbers or CVV.",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-006",
+                "FR-007",
+                "COM-001"
+            ],
+            "satisfies_requirements": [
+                "FR-006",
+                "COM-001"
+            ]
+        },
+        {
+            "id": "NotificationService",
+            "name": "Notification Dispatch Service",
+            "type": "Service",
+            "description": "Sends reservation confirmations, reminders, and receipts via approved external email/SMS providers.",
+            "trust_zone": "Application",
+            "requirement_ids": [
+                "FR-009",
+                "NFR-007"
+            ],
+            "satisfies_requirements": [
+                "FR-009"
+            ]
+        },
+        {
+            "id": "PrimaryDatabase",
+            "name": "Regional Transactional Database & Backup Store",
+            "type": "Database",
+            "description": "India-region encrypted relational data store with 15-min RPO / 60-min RTO backups and 7-year financial retention.",
+            "trust_zone": "Restricted Data",
+            "requirement_ids": [
+                "FR-004",
+                "FR-007",
+                "NFR-004",
+                "NFR-007",
+                "SEC-002",
+                "COM-002",
+                "COM-003"
+            ],
+            "satisfies_requirements": [
+                "NFR-003",
+                "NFR-004",
+                "NFR-007",
+                "SEC-002",
+                "COM-003"
+            ]
+        },
+        {
+            "id": "SecretsVault",
+            "name": "Key & Secrets Management Vault",
+            "type": "Security / Vault",
+            "description": "Managed secrets store safeguarding API credentials, DB credentials, certificates, and encryption keys.",
+            "trust_zone": "Restricted Data",
+            "requirement_ids": [
+                "SEC-002",
+                "SEC-005"
+            ],
+            "satisfies_requirements": [
+                "SEC-005"
+            ]
+        },
+        {
+            "id": "AuditAndMonitoring",
+            "name": "Immutable Audit Store & Observability Service",
+            "type": "Monitoring",
+            "description": "Central health checks, structured logs, metrics, alerting, and tamper-protected 365-day / 7-year audit event store.",
+            "trust_zone": "Corporate Management",
+            "requirement_ids": [
+                "FR-012",
+                "NFR-005",
+                "SEC-002",
+                "SEC-007",
+                "COM-003"
+            ],
+            "satisfies_requirements": [
+                "FR-012",
+                "NFR-005",
+                "SEC-007"
+            ]
+        },
+        {
+            "id": "PaymentGateway",
+            "name": "External Payment Gateway",
+            "type": "External Service",
+            "description": "Approved third-party PCI-compliant payment processor handling tokenized transactions.",
+            "trust_zone": "Approved Third Parties",
+            "requirement_ids": [
+                "FR-006",
+                "COM-001",
+                "NFR-007"
+            ]
+        },
+        {
+            "id": "EmailSmsProvider",
+            "name": "External Email & SMS Provider",
+            "type": "External Service",
+            "description": "Approved third-party messaging provider for guest notifications and receipts.",
+            "trust_zone": "Approved Third Parties",
+            "requirement_ids": [
+                "FR-009",
+                "NFR-007"
+            ]
+        },
+        {
+            "id": "IdentityProvider",
+            "name": "Federated Identity Provider",
+            "type": "Identity",
+            "description": "External OIDC/MFA identity provider issuing authentication responses, role claims, and session tokens.",
+            "trust_zone": "Approved Third Parties",
+            "requirement_ids": [
+                "SEC-003",
+                "SEC-004"
+            ],
+            "satisfies_requirements": [
+                "SEC-003",
+                "SEC-004"
+            ]
+        },
+        {
+            "id": "BillingRatesService",
+            "name": "Billing, Invoicing & Rates Service",
+            "type": "Service",
+            "trust_zone": "Application",
+            "satisfies_requirements": [
+                "FR-007",
+                "FR-008",
+                "COM-003"
+            ]
+        },
+        {
+            "id": "GuestServiceReportingService",
+            "name": "Guest Service & Reporting Service",
+            "type": "Service",
+            "trust_zone": "Application",
+            "satisfies_requirements": [
+                "FR-010",
+                "FR-011"
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "id": "GuestClient->EdgeGateway",
+            "source": "GuestClient",
+            "target": "EdgeGateway",
+            "protocol": "HTTPS",
+            "data": "Search, reservation, profile, and service-request data",
+            "authentication": "OIDC session or guest session",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-010",
+                "SEC-001",
+                "SEC-006",
+                "SEC-008"
+            ]
+        },
+        {
+            "id": "StaffPortal->EdgeGateway",
+            "source": "StaffPortal",
+            "target": "EdgeGateway",
+            "protocol": "HTTPS",
+            "data": "Check-in, room status, rates, reports, and audit queries",
+            "authentication": "MFA and role token",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-003",
+                "FR-005",
+                "FR-008",
+                "FR-011",
+                "FR-012",
+                "SEC-001",
+                "SEC-003",
+                "SEC-004"
+            ]
+        },
+        {
+            "id": "EdgeGateway->IdentityProvider",
+            "source": "EdgeGateway",
+            "target": "IdentityProvider",
+            "protocol": "HTTPS / OIDC",
+            "data": "Authentication response, MFA verification, and role claims",
+            "authentication": "OIDC Client Credentials",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "SEC-001",
+                "SEC-003",
+                "SEC-004",
+                "SEC-006"
+            ]
+        },
+        {
+            "id": "EdgeGateway->ReservationService",
+            "source": "EdgeGateway",
+            "target": "ReservationService",
+            "protocol": "HTTPS",
+            "data": "Validated API request and identity claims",
+            "authentication": "Workload identity",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-003",
+                "NFR-001",
+                "NFR-002",
+                "SEC-001",
+                "SEC-004",
+                "SEC-006"
+            ]
+        },
+        {
+            "id": "ReservationService->InventoryService",
+            "source": "ReservationService",
+            "target": "InventoryService",
+            "protocol": "Service API (HTTPS)",
+            "data": "Availability hold, confirmation, modification, cancellation",
+            "authentication": "Mutual service identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": false,
+            "requirement_ids": [
+                "FR-001",
+                "FR-002",
+                "FR-004",
+                "FR-005",
+                "FR-008",
+                "FR-010",
+                "FR-011",
+                "NFR-003",
+                "SEC-001"
+            ]
+        },
+        {
+            "id": "ReservationService->PaymentService",
+            "source": "ReservationService",
+            "target": "PaymentService",
+            "protocol": "Service API (HTTPS)",
+            "data": "Invoice payment and refund orchestration requests",
+            "authentication": "Mutual service identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": false,
+            "requirement_ids": [
+                "FR-006",
+                "FR-007",
+                "SEC-001",
+                "COM-001"
+            ]
+        },
+        {
+            "id": "ReservationService->NotificationService",
+            "source": "ReservationService",
+            "target": "NotificationService",
+            "protocol": "Service API (HTTPS)",
+            "data": "Booking confirmation, reminder, and receipt trigger events",
+            "authentication": "Mutual service identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": false,
+            "requirement_ids": [
+                "FR-009",
+                "SEC-001"
+            ]
+        },
+        {
+            "id": "ReservationService->PrimaryDatabase",
+            "source": "ReservationService",
+            "target": "PrimaryDatabase",
+            "protocol": "Encrypted DB connection",
+            "data": "Guest, reservation, invoice, and privacy consent records",
+            "authentication": "Least-privilege workload identity",
+            "encryption": "TLS 1.3 / TDE",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-002",
+                "FR-007",
+                "NFR-004",
+                "NFR-007",
+                "SEC-002",
+                "SEC-004",
+                "SEC-006",
+                "COM-002",
+                "COM-003"
+            ]
+        },
+        {
+            "id": "InventoryService->PrimaryDatabase",
+            "source": "InventoryService",
+            "target": "PrimaryDatabase",
+            "protocol": "Encrypted DB connection",
+            "data": "Authoritative room inventory locks, housekeeping states, rates, and reports",
+            "authentication": "Least-privilege workload identity",
+            "encryption": "TLS 1.3 / TDE",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-004",
+                "FR-005",
+                "FR-008",
+                "FR-010",
+                "FR-011",
+                "NFR-003",
+                "SEC-002",
+                "SEC-006"
+            ]
+        },
+        {
+            "id": "PaymentService->SecretsVault",
+            "source": "PaymentService",
+            "target": "SecretsVault",
+            "protocol": "HTTPS",
+            "data": "Gateway API credentials, certificates, and encryption keys",
+            "authentication": "Least-privilege workload identity",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "SEC-001",
+                "SEC-004",
+                "SEC-005"
+            ]
+        },
+        {
+            "id": "PaymentService->PaymentGateway",
+            "source": "PaymentService",
+            "target": "PaymentGateway",
+            "protocol": "HTTPS",
+            "data": "Tokenized authorization, capture, and refund request",
+            "authentication": "Gateway API credential",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-006",
+                "NFR-007",
+                "SEC-001",
+                "SEC-005",
+                "SEC-006",
+                "COM-001"
+            ]
+        },
+        {
+            "id": "NotificationService->EmailSmsProvider",
+            "source": "NotificationService",
+            "target": "EmailSmsProvider",
+            "protocol": "HTTPS",
+            "data": "Approved email or SMS message",
+            "authentication": "Provider API credential",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-009",
+                "NFR-007",
+                "SEC-001",
+                "SEC-005",
+                "SEC-006"
+            ]
+        },
+        {
+            "id": "ReservationService->AuditAndMonitoring",
+            "source": "ReservationService",
+            "target": "AuditAndMonitoring",
+            "protocol": "HTTPS / Syslog",
+            "data": "Structured health metrics, correlation IDs, and immutable security audit events",
+            "authentication": "Workload identity (mTLS)",
+            "encryption": "TLS 1.3",
+            "trust_boundary_crossing": true,
+            "requirement_ids": [
+                "FR-012",
+                "NFR-005",
+                "SEC-001",
+                "SEC-007",
+                "COM-003"
+            ]
+        },
+        {
+            "id": "BillingRatesService->EdgeGateway",
+            "source": "BillingRatesService",
+            "target": "EdgeGateway",
+            "protocol": "HTTPS"
+        },
+        {
+            "id": "BillingRatesService->ReservationService",
+            "source": "BillingRatesService",
+            "target": "ReservationService",
+            "protocol": "Service API (HTTPS)"
+        },
+        {
+            "id": "BillingRatesService->PrimaryDatabase",
+            "source": "BillingRatesService",
+            "target": "PrimaryDatabase",
+            "protocol": "Encrypted DB connection"
+        },
+        {
+            "id": "BillingRatesService->AuditAndMonitoring",
+            "source": "BillingRatesService",
+            "target": "AuditAndMonitoring",
+            "protocol": "HTTPS / Syslog"
+        },
+        {
+            "id": "GuestServiceReportingService->EdgeGateway",
+            "source": "GuestServiceReportingService",
+            "target": "EdgeGateway",
+            "protocol": "HTTPS"
+        },
+        {
+            "id": "GuestServiceReportingService->ReservationService",
+            "source": "GuestServiceReportingService",
+            "target": "ReservationService",
+            "protocol": "Service API (HTTPS)"
+        },
+        {
+            "id": "GuestServiceReportingService->PrimaryDatabase",
+            "source": "GuestServiceReportingService",
+            "target": "PrimaryDatabase",
+            "protocol": "Encrypted DB connection"
+        },
+        {
+            "id": "GuestServiceReportingService->AuditAndMonitoring",
+            "source": "GuestServiceReportingService",
+            "target": "AuditAndMonitoring",
+            "protocol": "HTTPS / Syslog"
+        },
+        {
+            "id": "StaffPortal->EdgeGateway-MFA",
+            "source": "StaffPortal",
+            "target": "EdgeGateway",
+            "protocol": "HTTPS / MFA",
+            "satisfies_requirements": [
+                "SEC-003"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,1171 @@
+{
+    "project_name": "HarborStay Motel Platform",
+    "architecture_name": "HarborStay Motel Platform Architecture",
+    "summary": {
+        "total_requirements": 30,
+        "covered_requirements": 30,
+        "missing_requirements": 0,
+        "coverage_percentage": 100.0,
+        "unmapped_nodes_count": 2,
+        "unmapped_edges_count": 9,
+        "unknown_requirement_references_count": 0
+    },
+    "covered_requirements": {
+        "FR-001": {
+            "title": "Availability search",
+            "description": "Guests shall search room availability by property, arrival date, departure date, room type, occupancy, and accessibility needs.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "GuestClient",
+                    "name": "Guest Web & Mobile Interface",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "GuestClient->EdgeGateway",
+                    "name": "GuestClient -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Search, reservation, profile, and service-request data"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                }
+            ]
+        },
+        "FR-002": {
+            "title": "Reservation",
+            "description": "Guests and authorized front-desk staff shall create, view, modify, and cancel reservations according to the active cancellation policy.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "GuestClient",
+                    "name": "Guest Web & Mobile Interface",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "GuestClient->EdgeGateway",
+                    "name": "GuestClient -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Search, reservation, profile, and service-request data"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                }
+            ]
+        },
+        "FR-003": {
+            "title": "Check-in and check-out",
+            "description": "Front-desk staff shall check guests in and out, record the assigned room, and update the room occupancy state.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "StaffPortal",
+                    "name": "Staff & Auditor Operations Portal",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                }
+            ]
+        },
+        "FR-004": {
+            "title": "Room inventory",
+            "description": "The platform shall prevent double booking by maintaining one authoritative inventory record for every room and date range.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "InventoryService",
+                    "name": "Room Inventory & Housekeeping Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PrimaryDatabase",
+                    "name": "Regional Transactional Database & Backup Store",
+                    "node_type": "Database"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                }
+            ]
+        },
+        "FR-005": {
+            "title": "Housekeeping",
+            "description": "Housekeeping staff shall update each room as dirty, cleaning, inspected, maintenance blocked, or ready for occupancy.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "StaffPortal",
+                    "name": "Staff & Auditor Operations Portal",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "InventoryService",
+                    "name": "Room Inventory & Housekeeping Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                }
+            ]
+        },
+        "FR-006": {
+            "title": "Payments",
+            "description": "The platform shall send payment authorization and refund requests to an approved external payment gateway without storing raw card numbers or card security codes.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "PaymentService",
+                    "name": "Payment Orchestration Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PaymentGateway",
+                    "name": "External Payment Gateway",
+                    "node_type": "External Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PaymentService",
+                    "name": "ReservationService -> PaymentService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Invoice payment and refund orchestration requests"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->PaymentGateway",
+                    "name": "PaymentService -> PaymentGateway",
+                    "protocol": "HTTPS",
+                    "data": "Tokenized authorization, capture, and refund request"
+                }
+            ]
+        },
+        "FR-007": {
+            "title": "Invoices",
+            "description": "The platform shall generate an itemized invoice containing room charges, taxes, discounts, additional services, payments, and refunds.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "GuestClient",
+                    "name": "Guest Web & Mobile Interface",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PaymentService",
+                    "name": "Payment Orchestration Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PrimaryDatabase",
+                    "name": "Regional Transactional Database & Backup Store",
+                    "node_type": "Database"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PaymentService",
+                    "name": "ReservationService -> PaymentService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Invoice payment and refund orchestration requests"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                }
+            ]
+        },
+        "FR-008": {
+            "title": "Rates and policies",
+            "description": "Authorized property managers shall manage room rates, taxes, seasonal restrictions, cancellation rules, and promotional codes.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "StaffPortal",
+                    "name": "Staff & Auditor Operations Portal",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "InventoryService",
+                    "name": "Room Inventory & Housekeeping Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                }
+            ]
+        },
+        "FR-009": {
+            "title": "Notifications",
+            "description": "The platform shall send reservation confirmations, modifications, cancellations, check-in reminders, and payment receipts through approved email or SMS providers.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "NotificationService",
+                    "name": "Notification Dispatch Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "EmailSmsProvider",
+                    "name": "External Email & SMS Provider",
+                    "node_type": "External Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->NotificationService",
+                    "name": "ReservationService -> NotificationService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Booking confirmation, reminder, and receipt trigger events"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "NotificationService->EmailSmsProvider",
+                    "name": "NotificationService -> EmailSmsProvider",
+                    "protocol": "HTTPS",
+                    "data": "Approved email or SMS message"
+                }
+            ]
+        },
+        "FR-010": {
+            "title": "Guest service",
+            "description": "Guests and staff shall create and track service requests such as extra towels, late check-out, maintenance, and accessibility assistance.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "GuestClient",
+                    "name": "Guest Web & Mobile Interface",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "InventoryService",
+                    "name": "Room Inventory & Housekeeping Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "GuestClient->EdgeGateway",
+                    "name": "GuestClient -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Search, reservation, profile, and service-request data"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                }
+            ]
+        },
+        "FR-011": {
+            "title": "Reports Property managers",
+            "description": "Reports Property managers shall view occupancy, revenue, cancellations, refunds, room status, and service-request reports for properties they are authorized to manage.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "StaffPortal",
+                    "name": "Staff & Auditor Operations Portal",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "InventoryService",
+                    "name": "Room Inventory & Housekeeping Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                }
+            ]
+        },
+        "FR-012": {
+            "title": "Audit review",
+            "description": "Authorized security auditors shall search and export authentication, administrative, reservation, payment, and access-control audit events.",
+            "category": "functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "StaffPortal",
+                    "name": "Staff & Auditor Operations Portal",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "AuditAndMonitoring",
+                    "name": "Immutable Audit Store & Observability Service",
+                    "node_type": "Monitoring"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->AuditAndMonitoring",
+                    "name": "ReservationService -> AuditAndMonitoring",
+                    "protocol": "HTTPS / Syslog",
+                    "data": "Structured health metrics, correlation IDs, and immutable security audit events"
+                }
+            ]
+        },
+        "NFR-001": {
+            "title": "Availability",
+            "description": "The guest reservation service shall provide 99.9 percent monthly availability, excluding approved maintenance windows.",
+            "category": "non_functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "EdgeGateway",
+                    "name": "Edge WAF & API Gateway",
+                    "node_type": "Ingress / Gateway"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                }
+            ]
+        },
+        "NFR-002": {
+            "title": "Performance",
+            "description": "The 95th percentile response time for availability searches shall remain below 2 seconds under the agreed normal load.",
+            "category": "non_functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "EdgeGateway",
+                    "name": "Edge WAF & API Gateway",
+                    "node_type": "Ingress / Gateway"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                }
+            ]
+        },
+        "NFR-003": {
+            "title": "Concurrency",
+            "description": "The system shall support at least 500 simultaneous guest sessions and 100 simultaneous staff sessions without overselling room inventory.",
+            "category": "non_functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "EdgeGateway",
+                    "name": "Edge WAF & API Gateway",
+                    "node_type": "Ingress / Gateway"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "InventoryService",
+                    "name": "Room Inventory & Housekeeping Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                }
+            ]
+        },
+        "NFR-004": {
+            "title": "Recovery",
+            "description": "Production data protection shall support a recovery point objective of 15 minutes and a recovery time objective of 60 minutes.",
+            "category": "non_functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "PrimaryDatabase",
+                    "name": "Regional Transactional Database & Backup Store",
+                    "node_type": "Database"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                }
+            ]
+        },
+        "NFR-005": {
+            "title": "Observability",
+            "description": "Every production service shall expose health status, structured logs, metrics, correlation identifiers, and alerts for critical failures.",
+            "category": "non_functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "AuditAndMonitoring",
+                    "name": "Immutable Audit Store & Observability Service",
+                    "node_type": "Monitoring"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->AuditAndMonitoring",
+                    "name": "ReservationService -> AuditAndMonitoring",
+                    "protocol": "HTTPS / Syslog",
+                    "data": "Structured health metrics, correlation IDs, and immutable security audit events"
+                }
+            ]
+        },
+        "NFR-006": {
+            "title": "Accessibility",
+            "description": "Guest-facing web pages shall support keyboard navigation, readable focus indicators, and accessible labels for form controls.",
+            "category": "non_functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "GuestClient",
+                    "name": "Guest Web & Mobile Interface",
+                    "node_type": "Client"
+                }
+            ]
+        },
+        "NFR-007": {
+            "title": "Data residency",
+            "description": "Guest profile, reservation, and invoice data shall remain in the company-approved India hosting region, except data sent to approved third-party processors.",
+            "category": "non_functional",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "NotificationService",
+                    "name": "Notification Dispatch Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PrimaryDatabase",
+                    "name": "Regional Transactional Database & Backup Store",
+                    "node_type": "Database"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PaymentGateway",
+                    "name": "External Payment Gateway",
+                    "node_type": "External Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "EmailSmsProvider",
+                    "name": "External Email & SMS Provider",
+                    "node_type": "External Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->PaymentGateway",
+                    "name": "PaymentService -> PaymentGateway",
+                    "protocol": "HTTPS",
+                    "data": "Tokenized authorization, capture, and refund request"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "NotificationService->EmailSmsProvider",
+                    "name": "NotificationService -> EmailSmsProvider",
+                    "protocol": "HTTPS",
+                    "data": "Approved email or SMS message"
+                }
+            ]
+        },
+        "SEC-001": {
+            "title": "Transport security",
+            "description": "All internet-facing and service-to-service communications shall use TLS 1.2 or higher with certificate validation.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "EdgeGateway",
+                    "name": "Edge WAF & API Gateway",
+                    "node_type": "Ingress / Gateway"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "GuestClient->EdgeGateway",
+                    "name": "GuestClient -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Search, reservation, profile, and service-request data"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->IdentityProvider",
+                    "name": "EdgeGateway -> IdentityProvider",
+                    "protocol": "HTTPS / OIDC",
+                    "data": "Authentication response, MFA verification, and role claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->InventoryService",
+                    "name": "ReservationService -> InventoryService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Availability hold, confirmation, modification, cancellation"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PaymentService",
+                    "name": "ReservationService -> PaymentService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Invoice payment and refund orchestration requests"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->NotificationService",
+                    "name": "ReservationService -> NotificationService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Booking confirmation, reminder, and receipt trigger events"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->SecretsVault",
+                    "name": "PaymentService -> SecretsVault",
+                    "protocol": "HTTPS",
+                    "data": "Gateway API credentials, certificates, and encryption keys"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->PaymentGateway",
+                    "name": "PaymentService -> PaymentGateway",
+                    "protocol": "HTTPS",
+                    "data": "Tokenized authorization, capture, and refund request"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "NotificationService->EmailSmsProvider",
+                    "name": "NotificationService -> EmailSmsProvider",
+                    "protocol": "HTTPS",
+                    "data": "Approved email or SMS message"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->AuditAndMonitoring",
+                    "name": "ReservationService -> AuditAndMonitoring",
+                    "protocol": "HTTPS / Syslog",
+                    "data": "Structured health metrics, correlation IDs, and immutable security audit events"
+                }
+            ]
+        },
+        "SEC-002": {
+            "title": "Encryption at rest",
+            "description": "Guest data, reservation data, invoices, backups, audit logs, and application secrets shall be encrypted at rest.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "PrimaryDatabase",
+                    "name": "Regional Transactional Database & Backup Store",
+                    "node_type": "Database"
+                },
+                {
+                    "source_type": "node",
+                    "id": "SecretsVault",
+                    "name": "Key & Secrets Management Vault",
+                    "node_type": "Security / Vault"
+                },
+                {
+                    "source_type": "node",
+                    "id": "AuditAndMonitoring",
+                    "name": "Immutable Audit Store & Observability Service",
+                    "node_type": "Monitoring"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                }
+            ]
+        },
+        "SEC-003": {
+            "title": "Staff authentication",
+            "description": "Front-desk staff, managers, administrators, and security auditors shall use multi-factor authentication.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "StaffPortal",
+                    "name": "Staff & Auditor Operations Portal",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "IdentityProvider",
+                    "name": "Federated Identity Provider",
+                    "node_type": "Identity"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->IdentityProvider",
+                    "name": "EdgeGateway -> IdentityProvider",
+                    "protocol": "HTTPS / OIDC",
+                    "data": "Authentication response, MFA verification, and role claims"
+                }
+            ]
+        },
+        "SEC-004": {
+            "title": "Authorization",
+            "description": "The platform shall enforce role-based access control, property-level authorization, least privilege, and deny-by-default access.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "StaffPortal",
+                    "name": "Staff & Auditor Operations Portal",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "IdentityProvider",
+                    "name": "Federated Identity Provider",
+                    "node_type": "Identity"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "StaffPortal->EdgeGateway",
+                    "name": "StaffPortal -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Check-in, room status, rates, reports, and audit queries"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->IdentityProvider",
+                    "name": "EdgeGateway -> IdentityProvider",
+                    "protocol": "HTTPS / OIDC",
+                    "data": "Authentication response, MFA verification, and role claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->SecretsVault",
+                    "name": "PaymentService -> SecretsVault",
+                    "protocol": "HTTPS",
+                    "data": "Gateway API credentials, certificates, and encryption keys"
+                }
+            ]
+        },
+        "SEC-005": {
+            "title": "Secrets",
+            "description": "API credentials, database passwords, certificates, and encryption keys shall be stored in an approved secrets-management service and shall not be stored in source code.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "SecretsVault",
+                    "name": "Key & Secrets Management Vault",
+                    "node_type": "Security / Vault"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->SecretsVault",
+                    "name": "PaymentService -> SecretsVault",
+                    "protocol": "HTTPS",
+                    "data": "Gateway API credentials, certificates, and encryption keys"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->PaymentGateway",
+                    "name": "PaymentService -> PaymentGateway",
+                    "protocol": "HTTPS",
+                    "data": "Tokenized authorization, capture, and refund request"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "NotificationService->EmailSmsProvider",
+                    "name": "NotificationService -> EmailSmsProvider",
+                    "protocol": "HTTPS",
+                    "data": "Approved email or SMS message"
+                }
+            ]
+        },
+        "SEC-006": {
+            "title": "Network boundaries",
+            "description": "Public access, application services, restricted data stores, corporate administration, and third-party services shall be separated by explicit trust boundaries and network controls.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "EdgeGateway",
+                    "name": "Edge WAF & API Gateway",
+                    "node_type": "Ingress / Gateway"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "GuestClient->EdgeGateway",
+                    "name": "GuestClient -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Search, reservation, profile, and service-request data"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->IdentityProvider",
+                    "name": "EdgeGateway -> IdentityProvider",
+                    "protocol": "HTTPS / OIDC",
+                    "data": "Authentication response, MFA verification, and role claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "EdgeGateway->ReservationService",
+                    "name": "EdgeGateway -> ReservationService",
+                    "protocol": "HTTPS",
+                    "data": "Validated API request and identity claims"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "InventoryService->PrimaryDatabase",
+                    "name": "InventoryService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Authoritative room inventory locks, housekeeping states, rates, and reports"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->PaymentGateway",
+                    "name": "PaymentService -> PaymentGateway",
+                    "protocol": "HTTPS",
+                    "data": "Tokenized authorization, capture, and refund request"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "NotificationService->EmailSmsProvider",
+                    "name": "NotificationService -> EmailSmsProvider",
+                    "protocol": "HTTPS",
+                    "data": "Approved email or SMS message"
+                }
+            ]
+        },
+        "SEC-007": {
+            "title": "Audit protection",
+            "description": "Security-relevant audit events shall be timestamped, linked to an actor or workload identity, protected from unauthorized modification, and retained for at least 365 days.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "AuditAndMonitoring",
+                    "name": "Immutable Audit Store & Observability Service",
+                    "node_type": "Monitoring"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->AuditAndMonitoring",
+                    "name": "ReservationService -> AuditAndMonitoring",
+                    "protocol": "HTTPS / Syslog",
+                    "data": "Structured health metrics, correlation IDs, and immutable security audit events"
+                }
+            ]
+        },
+        "SEC-008": {
+            "title": "Application protection",
+            "description": "Internet traffic shall pass through rate limiting and web-application attack protection, and critical vulnerabilities shall block production release.",
+            "category": "security",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "EdgeGateway",
+                    "name": "Edge WAF & API Gateway",
+                    "node_type": "Ingress / Gateway"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "GuestClient->EdgeGateway",
+                    "name": "GuestClient -> EdgeGateway",
+                    "protocol": "HTTPS",
+                    "data": "Search, reservation, profile, and service-request data"
+                }
+            ]
+        },
+        "COM-001": {
+            "title": "Payment-data boundary",
+            "description": "The company shall use a payment gateway tokenization flow so that raw payment-card data does not enter the motel platform trust boundary.",
+            "category": "compliance",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "PaymentService",
+                    "name": "Payment Orchestration Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PaymentGateway",
+                    "name": "External Payment Gateway",
+                    "node_type": "External Service"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PaymentService",
+                    "name": "ReservationService -> PaymentService",
+                    "protocol": "Service API (HTTPS)",
+                    "data": "Invoice payment and refund orchestration requests"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "PaymentService->PaymentGateway",
+                    "name": "PaymentService -> PaymentGateway",
+                    "protocol": "HTTPS",
+                    "data": "Tokenized authorization, capture, and refund request"
+                }
+            ]
+        },
+        "COM-002": {
+            "title": "Privacy rights",
+            "description": "The platform shall record privacy consent and support authorized access, correction, export, and deletion requests for guest personal data, subject to legal retention obligations.",
+            "category": "compliance",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "GuestClient",
+                    "name": "Guest Web & Mobile Interface",
+                    "node_type": "Client"
+                },
+                {
+                    "source_type": "node",
+                    "id": "ReservationService",
+                    "name": "Reservation & Front-Desk Service",
+                    "node_type": "Service"
+                },
+                {
+                    "source_type": "node",
+                    "id": "PrimaryDatabase",
+                    "name": "Regional Transactional Database & Backup Store",
+                    "node_type": "Database"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                }
+            ]
+        },
+        "COM-003": {
+            "title": "Financial retention",
+            "description": "Final invoices, tax records, refunds, and related audit evidence shall be retained for seven years and access shall be limited to authorized roles.",
+            "category": "compliance",
+            "covered": true,
+            "sources": [
+                {
+                    "source_type": "node",
+                    "id": "PrimaryDatabase",
+                    "name": "Regional Transactional Database & Backup Store",
+                    "node_type": "Database"
+                },
+                {
+                    "source_type": "node",
+                    "id": "AuditAndMonitoring",
+                    "name": "Immutable Audit Store & Observability Service",
+                    "node_type": "Monitoring"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->PrimaryDatabase",
+                    "name": "ReservationService -> PrimaryDatabase",
+                    "protocol": "Encrypted DB connection",
+                    "data": "Guest, reservation, invoice, and privacy consent records"
+                },
+                {
+                    "source_type": "edge",
+                    "id": "ReservationService->AuditAndMonitoring",
+                    "name": "ReservationService -> AuditAndMonitoring",
+                    "protocol": "HTTPS / Syslog",
+                    "data": "Structured health metrics, correlation IDs, and immutable security audit events"
+                }
+            ]
+        }
+    },
+    "missing_requirements": {},
+    "unmapped_nodes": [
+        "BillingRatesService",
+        "GuestServiceReportingService"
+    ],
+    "unmapped_edges": [
+        "BillingRatesService->EdgeGateway",
+        "BillingRatesService->ReservationService",
+        "BillingRatesService->PrimaryDatabase",
+        "BillingRatesService->AuditAndMonitoring",
+        "GuestServiceReportingService->EdgeGateway",
+        "GuestServiceReportingService->ReservationService",
+        "GuestServiceReportingService->PrimaryDatabase",
+        "GuestServiceReportingService->AuditAndMonitoring",
+        "StaffPortal->EdgeGateway-MFA"
+    ],
+    "unknown_requirement_references": []
+}
